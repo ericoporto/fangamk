@@ -89,6 +89,7 @@ var init = jsonLevelGet(descriptors+'init.json');
 bootstrap.onLoadDOM = function(){
 	try{
 		document.ontouchmove = function(e){ e.preventDefault();}
+		document.getElementsByTagName('canvas')[0].getContext('2d').fillText("LOADING...", 64, 64)
 		resources.harvest();
         screen.init();
         player.setup();
