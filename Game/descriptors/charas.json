@@ -1,0 +1,51 @@
+
+{
+"Charas":
+    {
+    "WeirdGuy":
+        {
+        "movements":
+            [["move","right"],
+             ["move","left"]],
+        "actions":
+            {
+            "type":  [  1,  0],
+            "list":
+                [["IF","var:test;bigger;0"],
+                 ["showText","See you are making friends... Talked var:test times!"],
+                 ["ELSE",""],
+                 ["showText","You should talk with the guy in yellow first... "],
+                 ["END",""]]
+            },
+        "charaset": "person2"
+        },
+    "YellowGuy":
+        {
+        "movements":
+            [["face","down"]],
+        "actions":
+            {
+            "type":  [  1,  0],
+            "list":
+                [["showText","..."],
+                 ["varPlusOne","test"]]
+            },
+        "charaset": "yellow"
+        },
+    "OtherWeird":
+        {
+        "movements":
+            [["face","up"],
+             ["face","left"],
+             ["face","down"],
+             ["face","right"]],
+        "actions":
+            {
+            "list":
+                [["showText","spinning spinning"]],
+            "type":  [  1,  0]
+            },
+        "charaset": "person2"
+        }
+    }
+}
