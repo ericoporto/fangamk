@@ -109,6 +109,9 @@ bootstrap.onLoadDOM = function(){
         debug.FPS.loop();
         chars = new charalist();
         chars.push(player)
+		var parent = document.getElementById("gameArea");
+		var child = document.getElementById("font");
+		parent.removeChild(child);
 	}catch (err){
 		alert("onLoadDOM "+err);
 	}
