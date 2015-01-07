@@ -88,6 +88,9 @@ var init = jsonLevelGet(descriptors+'init.json');
 
 bootstrap.onLoadDOM = function(){
 	try{
+		var parentOfDel = document.getElementById("gameArea");
+		var child = document.getElementById("loading");
+		parentOfDel.removeChild(child);
 		document.ontouchmove = function(e){ e.preventDefault();}
 		document.getElementsByTagName('canvas')[0].getContext('2d').fillText("LOADING...", 64, 64)
 		resources.harvest();
@@ -109,9 +112,6 @@ bootstrap.onLoadDOM = function(){
         debug.FPS.loop();
         chars = new charalist();
         chars.push(player)
-		var parent = document.getElementById("gameArea");
-		var child = document.getElementById("font");
-		parent.removeChild(child);
 	}catch (err){
 		alert("onLoadDOM "+err);
 	}
