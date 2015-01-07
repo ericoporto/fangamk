@@ -88,9 +88,8 @@ var init = jsonLevelGet(descriptors+'init.json');
 
 bootstrap.onLoadDOM = function(){
 	try{
-		var parentOfDel = document.getElementById("gameArea");
 		var child = document.getElementById("loading");
-		parentOfDel.removeChild(child);
+		child.parentNode.removeChild(child);
 		document.ontouchmove = function(e){ e.preventDefault();}
 		document.getElementsByTagName('canvas')[0].getContext('2d').fillText("LOADING...", 64, 64)
 		resources.harvest();
