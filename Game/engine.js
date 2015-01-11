@@ -65,12 +65,14 @@ var menus = {
     }
 };
 
-function menu(_items, _index) {
+function menu(_items, _index, _noexit) {
 
     var tempArray = [];
 
     _index = (typeof _index === "undefined") ? null : _index;
+    _noexit = (typeof _noexit === "undefined") ? false : true;
     this.items=_items;
+    this.noexit=_noexit;
 
     this.parent = null
     this.index = _index
@@ -188,7 +190,7 @@ function menu(_items, _index) {
                     }
                     this.menuKeyWasPressed=32
                 }else if(HID.inputs["cancel"].active){
-                    if(this._counter >= 20) {
+                    if(this._counter >= 20 && this.noexit == false) {
                         HID.inputs["cancel"].active = false
                         this.exit()
                         engine.waitTime(200)
@@ -202,6 +204,15 @@ function menu(_items, _index) {
     };
 
     this.action = this.activate;
+    this.delete = function(){
+        for (var i = 0; i < menus.allMenus.length; i++) {
+            if(menus.allMenus[i] == this){
+                menus.allMenus.splice(i,1)
+                break
+            }
+        }
+
+    }
 
     menus.allMenus.push(this);
 
@@ -416,6 +427,7 @@ player.setup = function() {
     player['mapx'] = init['Player']['initPosX'];
     player['mapy'] = init['Player']['initPosY'];
     player['facing'] = init['Player']['facing'];
+    player['party'] = init['Player']['party']
     player['steps'] = 0;
     player['running'] = false;
     player['update'] = function(){
@@ -526,6 +538,8 @@ engine.setup = function(){
     engine.st.vars = {};
     engine.resetBlocks()
     engine.state = "startScreen"
+    engine.questionBoxUndef = -1
+    engine.questionBoxAnswer = engine.questionBoxUndef
 }
 
 engine.playerFaceChar = function(){
@@ -620,6 +634,8 @@ engine.loop = function(){
                         engine.updateChars();
                     } else if(engine.state == "startScreen"){
                         title.startScreen();
+                    } else if(engine.state == "battle"){
+                        battle.update()
                     }
 
                     engine.runatomStack();
@@ -720,6 +736,10 @@ eventInMap = function(level,event,evType,position) {
         }
     }
 };
+
+engine.battle = function(param){
+    battle.start(param)
+}
 
 engine.changeState = function(param) {
     engine.state = param[0]
@@ -849,6 +869,23 @@ engine.stopPicture = function(param){
     screen.clearPicture()
 }
 
+engine.questionBox = function(param){
+    var answers = {}
+    engine.questionBoxAnswer = engine.questionBoxUndef
+    if(!(typeof engine.questionBoxMenu === "undefined")){
+        engine.questionBoxMenu.delete()
+    }
+
+    for(var i = 0; i < param.length; i++){
+        (function(i){
+            answers[param[i]] = {action: [function(){ engine.questionBoxAnswer = i},'exit'], index: i} ;
+        })(i);
+    }
+    engine.questionBoxMenu = new menu(answers, undefined, true)
+    menus.setAllDrawables()
+    engine.questionBoxMenu.activate()
+}
+
 translateActions = function(action, param, position) {
     actions[action](param,position)
 };
@@ -864,6 +901,11 @@ lastBlock = function() {
         value = bstk[0];
     }
     return value
+}
+
+actions.questionBox = function(param, position){
+    var params = param.split(';')
+    engine.atomStack.push([engine.questionBox,params])
 }
 
 actions.stopPicture = function(param, position){
@@ -992,6 +1034,14 @@ actions.testVar = function(param,position) {
 
 actions.noEffect = function(param,position) {
         engine.atomStack.push([screen.effects.noEffect,'']);
+};
+
+actions.battle = function(param,position) {
+    var params = param.split(';')
+    actions.fadeOut('tension1;keepEffect')
+    actions.changeState('battle')
+    engine.atomStack.push([engine.battle,params]);
+    actions.fadeIn('blackFadeIn;doNotKeep')
 };
 
 engine.update = function(frameCount){
