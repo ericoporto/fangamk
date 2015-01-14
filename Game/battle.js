@@ -265,6 +265,12 @@ battle.mAttack = function(mn){
             target = battle.hero
     }
 
+    if(damage>0){
+        screen.flashMonster(mon,'#eeeeee')
+    } else {
+        screen.shakeMonster(mon)
+    }
+
     battle.resolveAtk(mon, target, damage, actionType)
 }
 
