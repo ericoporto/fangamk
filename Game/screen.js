@@ -297,7 +297,7 @@ screen.resize = function() {
         this.currentHeight = window.innerHeight;
         this.currentWidth = this.currentHeight * this.RATIO;
     } else {
-        this.GHEIGHT=288;
+        this.GHEIGHT=256; //was 288
         this.currentHeight = window.innerHeight * this.HEIGHT/this.GHEIGHT
         this.currentWidth = this.currentHeight * this.RATIO;
     }
