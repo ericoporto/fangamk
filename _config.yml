@@ -19,8 +19,8 @@ author_image: "/assets/images/author.jpg"
 
 paginate:	5
 
-url: "http://ericoporto.github.io/fangamk" # the base hostname & protocol for your site
-baseurl: ""
+url: "http://ericoporto.github.io" # the base hostname & protocol for your site
+baseurl: "/fangamk"
 
 # social icons and sharing options
 social:
